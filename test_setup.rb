@@ -207,30 +207,11 @@ def test_postgres_accessible
   error "psql is not accessible. Get help."
 end
 
-def test_sqlite3_setup
-  test "SQLite3" do
-    test_sqlite3_installed &&
-    test_sqlite3_trace_available
-  end
-end
-
-def test_sqlite3_installed
-  return true if ssystem("which sqlite3")
-
-  error "sqlite3 is not installed. Run `brew install sqlite3 && brew link sqlite3 --force --overwrite`"
-end
-
-def test_sqlite3_trace_available
-  trace_command_accessible = ssystem('sqlite3 /tmp/temp.db ".trace off"')
-
-  return true if trace_command_accessible
-  error "sqlite3 is not up to date. If Homebrew is ok, then `brew install sqlite3`."
-end
-
 def test_ruby_setup
-  test "Ruby" do
+  test "JRuby" do
     test_ruby_isnt_system &&
-    test_ruby_version &&
+    test_jruby &&
+    test_jruby_version &&
     test_rubygems_location
   end
 end
@@ -240,9 +221,26 @@ def test_ruby_isnt_system
 
   return true unless ruby_is_system
 
-  error "ruby is not managed by a ruby version manager. Install rbenv, then run `rbenv install 2.2.0`."
+  error "ruby is not managed by a ruby version manager. Install rbenv, then run `rbenv install jruby-1.7.21`."
 end
 
+def test_jruby
+  jruby = %x(ruby -v | cut -d ' ' -f 1).chomp
+
+  return true if jruby == "jruby"
+
+  error "make sure you are using jruby!"
+end
+
+def test_jruby_version
+  jruby_version = %x(ruby -v | cut -d ' ' -f 2).chomp
+
+  return true if jruby_version == "1.7.21"
+
+  error "incorrect jruby version (current running #{jruby_version}). Use your Ruby Version Manager to install 1.7.21."
+end
+
+# not using this test, using above instead
 RUBY_VERSIONS = %w(2.0.0 2.1.0 2.1.1 2.1.2 2.1.3 2.1.4 2.1.5 2.2.0 2.2.1)
 def test_ruby_version
   ruby_version = %x(ruby -v | cut -d ' ' -f 2).chomp.split("p").first
