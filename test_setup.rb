@@ -10,11 +10,9 @@ end
 
 def test_setup
   test_command_line_tools_setup
-  test_sublime_setup
   test_path_setup
   test_homebrew_setup
   test_postgres_setup
-  test_sqlite3_setup
   test_ruby_version_manager_setup
   test_ruby_setup
   test_gem_setup
@@ -41,25 +39,6 @@ def test_command_line_tools_installed
   error "OS X Command Line Tools are not installed. Run `xcode-select --install` and follow the instructions OR open https://developer.apple.com/downloads and search for 'command line tools' for OS X #{osx_version}."
 end
 
-def test_sublime_setup
-  test "Sublime" do
-    test_sublime_command &&
-    test_sublime_version
-  end
-end
-
-def test_sublime_command
-  return true if ssystem("which subl")
-
-  error "subl command is missing."
-end
-
-def test_sublime_version
-  return true if %x(subl -v) =~ /\ASublime Text/
-
-  error "subl set up incorrectly ('subl -v' failed to run)."
-end
-
 def test_path_setup
   test "Path" do
     test_path_ordering
@@ -75,7 +54,6 @@ def test_path_ordering
 
   error"/usr/local/bin should come before both /usr/bin and /bin in $PATH"
 end
-
 
 def test_homebrew_setup
   test "Homebrew" do
@@ -285,11 +263,7 @@ end
 
 def test_gem_setup
   test "Gems" do
-    test_gem_bundler &&
-    test_gem_nokogiri &&
-    test_gem_pg &&
-    test_gem_sqlite3 &&
-    test_gem_rspec
+    test_gem_bundler
   end
 end
 
@@ -316,30 +290,6 @@ end
 def gem_installed?(gem_name)
   @gem_list ||= %x(gem list -l --no-version).split("\n")
   @gem_list.include?(gem_name)
-end
-
-def test_gem_nokogiri
-  return true if gem_installed?("nokogiri")
-
-  error "nokogiri is not installed. If Ruby is ok, then run `gem install nokogiri`."
-end
-
-def test_gem_pg
-  return true if gem_installed?("pg")
-
-  error "pg is not installed. If Ruby and Postgres are ok, then run `gem install pg`."
-end
-
-def test_gem_sqlite3
-  return true if gem_installed?("sqlite3")
-
-  error "sqlite3 is not installed. If Ruby and SQLite3 are ok, then run `gem install sqlite3`."
-end
-
-def test_gem_rspec
-  return true if gem_installed?("rspec")
-
-  error "rspec is not installed. If Ruby and SQLite3 are ok, then run `gem install rspec`."
 end
 
 def test(string, &block)
@@ -382,5 +332,4 @@ def ssystem(command)
   system("#{command} &>/dev/null")
 end
 
-#test_rbenv_setup
 test_setup
