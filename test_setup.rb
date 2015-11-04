@@ -229,7 +229,7 @@ def test_jruby
 
   return true if jruby == "jruby"
 
-  error "make sure you are using jruby!"
+  error "you are using ruby, not jruby! Use your Ruby Version Manager to install jruby-1.7.21."
 end
 
 def test_jruby_version
