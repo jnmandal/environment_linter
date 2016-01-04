@@ -8,7 +8,7 @@ development with Ruby. It assumes OS X 10.8 or newer.
 At the terminal run:
 
 ```sh
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/mikelikesbikes/environment_linter/master/test_setup.rb)"
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/jnmandal/environment_linter/dashboard-jr/test_setup.rb)"
 ```
 
 This will check several common sticking points with machine setup and attempt to
